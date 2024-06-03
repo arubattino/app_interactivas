@@ -1,4 +1,7 @@
-const mongoose = require('mongoose');
+//const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+//const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Conectar a la base de datos
 mongoose.connect('mongodb://localhost:27017/usuarios', {
@@ -7,20 +10,21 @@ mongoose.connect('mongodb://localhost:27017/usuarios', {
 }).then(() => {
     console.log('Conectado a MongoDB');
     // Llamar a la función para eliminar todos los usuarios
-    eliminarTodosLosUsuarios()
+    //eliminarTodosLosUsuarios()
+    return Promise.resolve()
         .then(() => {
             // Llamar a la función para imprimir todos los usuarios después de eliminarlos
             //return imprimirTodosLosUsuarios();
         }).then(() => {
             // Crear y guardar un nuevo documento después de eliminar todos los usuarios
-            //return guardarNuevoUsuarios();
+            return guardarNuevoUsuarios();
         }).then(() => {
             // Imprimir todos los usuarios después de guardar uno nuevo
-            //return imprimirTodosLosUsuarios();
+            return imprimirTodosLosUsuarios();
         }).catch((error) => {
             console.error('Error:', error);
         });
-    eliminarTodosLosUsuarios()
+    //eliminarTodosLosUsuarios()
 }).catch((error) => {
     console.error('Error al conectar a MongoDB:', error);
 });
@@ -37,6 +41,20 @@ const ejemploSchema = new Schema({
         type: String,
         required: true,
         match: [/.+\@.+\..+/, 'Por favor ingrese un correo válido']
+    },
+    password: { type: String, required: true }
+});
+
+// Middleware para encriptar la contraseña antes de guardar
+ejemploSchema.pre('save', async function (next) {
+    try {
+        if (this.isModified('password')) {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+        }
+        next();
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -72,7 +90,8 @@ function guardarNuevoUsuarios() {
         apellido: 'Sanchez',
         mascota: 'Perro',
         edad_mascota: 3,
-        mail: 'juan.perez@example.com'
+        mail: 'juanc.sanchez@example.com',
+        password: 'password123'
     });
 
     return nuevoUsuario.save()

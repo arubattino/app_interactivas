@@ -1,9 +1,16 @@
-const bcrypt = require('bcrypt');
-const express = require('express');
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
-const cors = require('cors');
+//const bcrypt = require('bcrypt');
+//const express = require('express');
+//const bodyParser = require('body-parser');
+//const jwt = require('jsonwebtoken');
+//const mongoose = require('mongoose');
+//const cors = require('cors');
+
+import bcrypt from 'bcrypt';
+import express from 'express';
+import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
 // Crear una instancia de Express
 const app = express();
