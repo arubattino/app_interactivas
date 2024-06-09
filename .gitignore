@@ -1,3 +1,5 @@
 /node_modules
 /app_react3
-/app_react/node_modules
+/login/node_modules
+/register/node_modules
+/app.js

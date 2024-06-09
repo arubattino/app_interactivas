@@ -1,10 +1,3 @@
-//const bcrypt = require('bcrypt');
-//const express = require('express');
-//const bodyParser = require('body-parser');
-//const jwt = require('jsonwebtoken');
-//const mongoose = require('mongoose');
-//const cors = require('cors');
-
 import bcrypt from 'bcrypt';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -38,10 +31,16 @@ const ejemploSchema = new Schema({
     apellido: { type: String, required: true },
     mascota: { type: String, required: true },
     edad_mascota: { type: Number, min: 0 },
+    pais: { type: String, required: true },
+    provincia: { type: String, required: true },
+    ciudad: { type: String, required: true },
+    barrio: { type: String, required: true },
+    direccion: { type: String, required: true },
     activo: { type: Boolean, default: true },
     mail: {
         type: String,
         required: true,
+        unique: true, // Asegura que el correo sea único
         match: [/.+\@.+\..+/, 'Por favor ingrese un correo válido']
     },
     password: { type: String, required: true }
@@ -62,6 +61,23 @@ ejemploSchema.pre('save', async function (next) {
 
 // Crear un modelo
 const Ejemplo = mongoose.model('Ejemplo', ejemploSchema);
+
+// Ruta para el registro de usuario
+app.post('/register', async (req, res) => {
+    const { nombre, apellido, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, mail, password } = req.body;
+    try {
+        const existingUser = await Ejemplo.findOne({ mail });
+        if (existingUser) {
+            return res.status(400).json({ error: 'El correo ya está registrado' });
+        }
+        const newUser = new Ejemplo({ nombre, apellido, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, mail, password });
+        await newUser.save();
+        res.status(201).json({ message: 'Usuario registrado exitosamente' });
+    } catch (error) {
+        console.error('Error al registrar usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
 
 // Ruta para el inicio de sesión
 app.post('/login', async (req, res) => {
