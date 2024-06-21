@@ -2,14 +2,14 @@ import React, { useReducer } from "react";
 import "./styles.css";
 import axios from 'axios';
 
-// Función de registro
-function register({ nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion }) {
+// Función de registro para proveedores de servicios
+function registerProvider({ nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion }) {
   return new Promise((resolve, reject) => {
-    // URL del servidor de registro
-    const url = 'http://localhost:3001/registerUser';
+    // URL del servidor de registro para proveedores
+    const url = 'http://localhost:3001/registerProvider';
 
-    // Realizar solicitud POST para registrar un nuevo usuario
-    axios.post(url, { nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion })
+    // Realizar solicitud POST para registrar un nuevo proveedor de servicios
+    axios.post(url, { nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion })
       .then(response => {
         // Imprimir la respuesta en la consola
         console.log('Respuesta del backend:', response.data);
@@ -28,8 +28,7 @@ const initialState = {
   apellido: "",
   mail: "",
   password: "",
-  mascota: "",
-  edad_mascota: "",
+  descripcion: "",
   pais: "",
   provincia: "",
   ciudad: "",
@@ -64,6 +63,8 @@ function registerReducer(state = initialState, action) {
         ...state,
         [action.field]: action.value,
       };
+    case "reset":
+      return initialState;
     default:
       return state;
   }
@@ -71,7 +72,7 @@ function registerReducer(state = initialState, action) {
 
 export default function App() {
   const [registerState, registerDispatch] = useReducer(registerReducer, initialState);
-  const { nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, isLoading, error, isRegistered } = registerState;
+  const { nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion, isLoading, error, isRegistered } = registerState;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +80,7 @@ export default function App() {
     registerDispatch({ type: "register" });
 
     try {
-      const response = await register({ nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion });
+      const response = await registerProvider({ nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion });
       registerDispatch({ type: "success" });
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -96,15 +97,15 @@ export default function App() {
       <div className="register-container">
         {isRegistered ? (
           <>
-            <h1>Registration Successful!</h1>
+            <h1>Registro Exitoso!</h1>
             <button onClick={() => registerDispatch({ type: "reset" })}>
-              Register Another User
+              Registrar otro Proveedor
             </button>
           </>
         ) : (
           <form className="form" onSubmit={handleSubmit}>
             {error && <p className="error">{error}</p>}
-            <p>Registro de Nuevo Usuario:</p>
+            <p>Registro de Proveedores:</p>
             <input
               type="text"
               placeholder="Nombre"
@@ -156,24 +157,12 @@ export default function App() {
             />
             <input
               type="text"
-              placeholder="Mascota"
-              value={mascota}
+              placeholder="Descripción"
+              value={descripcion}
               onChange={(e) =>
                 registerDispatch({
                   type: "fieldUpdate",
-                  field: "mascota",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="number"
-              placeholder="Edad de la Mascota"
-              value={edad_mascota}
-              onChange={(e) =>
-                registerDispatch({
-                  type: "fieldUpdate",
-                  field: "edad_mascota",
+                  field: "descripcion",
                   value: e.currentTarget.value,
                 })
               }
@@ -247,3 +236,4 @@ export default function App() {
     </div>
   );
 }
+

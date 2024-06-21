@@ -2,14 +2,14 @@ import React, { useReducer } from "react";
 import "./styles.css";
 import axios from 'axios';
 
-// Función de registro
-function register({ nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion }) {
+// Función de registro para servicios
+function registerService({ mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general }) {
   return new Promise((resolve, reject) => {
-    // URL del servidor de registro
-    const url = 'http://localhost:3001/registerUser';
+    // URL del servidor de registro para servicios
+    const url = 'http://localhost:3001/registerService';
 
-    // Realizar solicitud POST para registrar un nuevo usuario
-    axios.post(url, { nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion })
+    // Realizar solicitud POST para registrar un nuevo servicio
+    axios.post(url, { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general })
       .then(response => {
         // Imprimir la respuesta en la consola
         console.log('Respuesta del backend:', response.data);
@@ -24,17 +24,17 @@ function register({ nombre, apellido, mail, password, mascota, edad_mascota, pai
 }
 
 const initialState = {
-  nombre: "",
-  apellido: "",
   mail: "",
   password: "",
-  mascota: "",
-  edad_mascota: "",
-  pais: "",
-  provincia: "",
-  ciudad: "",
+  tipo_servicio: "",
+  precio: "",
+  tipo_animal: "",
   barrio: "",
   direccion: "",
+  telefono: "",
+  mail_contacto: "",
+  nombre_contacto: "",
+  descripcion_general: "",
   isLoading: false,
   error: "",
   isRegistered: false,
@@ -64,14 +64,17 @@ function registerReducer(state = initialState, action) {
         ...state,
         [action.field]: action.value,
       };
+    case "reset":
+      return initialState;
     default:
       return state;
   }
 }
 
+
 export default function App() {
   const [registerState, registerDispatch] = useReducer(registerReducer, initialState);
-  const { nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, isLoading, error, isRegistered } = registerState;
+  const { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general, isLoading, error, isRegistered } = registerState;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +82,7 @@ export default function App() {
     registerDispatch({ type: "register" });
 
     try {
-      const response = await register({ nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion });
+      const response = await registerService({ mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general });
       registerDispatch({ type: "success" });
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -96,42 +99,18 @@ export default function App() {
       <div className="register-container">
         {isRegistered ? (
           <>
-            <h1>Registration Successful!</h1>
+            <h1>Registro Exitoso!</h1>
             <button onClick={() => registerDispatch({ type: "reset" })}>
-              Register Another User
+              Registrar otro Servicio
             </button>
           </>
         ) : (
           <form className="form" onSubmit={handleSubmit}>
             {error && <p className="error">{error}</p>}
-            <p>Registro de Nuevo Usuario:</p>
-            <input
-              type="text"
-              placeholder="Nombre"
-              value={nombre}
-              onChange={(e) =>
-                registerDispatch({
-                  type: "fieldUpdate",
-                  field: "nombre",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Apellido"
-              value={apellido}
-              onChange={(e) =>
-                registerDispatch({
-                  type: "fieldUpdate",
-                  field: "apellido",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
+            <p>Registro de Servicios:</p>
             <input
               type="email"
-              placeholder="Email"
+              placeholder="Email del Proveedor"
               value={mail}
               onChange={(e) =>
                 registerDispatch({
@@ -143,7 +122,7 @@ export default function App() {
             />
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Password del Proveedor"
               autoComplete="new-password"
               value={password}
               onChange={(e) =>
@@ -156,60 +135,36 @@ export default function App() {
             />
             <input
               type="text"
-              placeholder="Mascota"
-              value={mascota}
+              placeholder="Tipo de Servicio"
+              value={tipo_servicio}
               onChange={(e) =>
                 registerDispatch({
                   type: "fieldUpdate",
-                  field: "mascota",
+                  field: "tipo_servicio",
                   value: e.currentTarget.value,
                 })
               }
             />
             <input
               type="number"
-              placeholder="Edad de la Mascota"
-              value={edad_mascota}
+              placeholder="Precio"
+              value={precio}
               onChange={(e) =>
                 registerDispatch({
                   type: "fieldUpdate",
-                  field: "edad_mascota",
+                  field: "precio",
                   value: e.currentTarget.value,
                 })
               }
             />
             <input
               type="text"
-              placeholder="País"
-              value={pais}
+              placeholder="Tipo de Animal"
+              value={tipo_animal}
               onChange={(e) =>
                 registerDispatch({
                   type: "fieldUpdate",
-                  field: "pais",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Provincia"
-              value={provincia}
-              onChange={(e) =>
-                registerDispatch({
-                  type: "fieldUpdate",
-                  field: "provincia",
-                  value: e.currentTarget.value,
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Ciudad"
-              value={ciudad}
-              onChange={(e) =>
-                registerDispatch({
-                  type: "fieldUpdate",
-                  field: "ciudad",
+                  field: "tipo_animal",
                   value: e.currentTarget.value,
                 })
               }
@@ -234,6 +189,53 @@ export default function App() {
                 registerDispatch({
                   type: "fieldUpdate",
                   field: "direccion",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Teléfono"
+              value={telefono}
+              onChange={(e) =>
+                registerDispatch({
+                  type: "fieldUpdate",
+                  field: "telefono",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <input
+              type="email"
+              placeholder="Email de Contacto"
+              value={mail_contacto}
+              onChange={(e) =>
+                registerDispatch({
+                  type: "fieldUpdate",
+                  field: "mail_contacto",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Nombre del Contacto"
+              value={nombre_contacto}
+              onChange={(e) =>
+                registerDispatch({
+                  type: "fieldUpdate",
+                  field: "nombre_contacto",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <textarea
+              placeholder="Descripción General"
+              value={descripcion_general}
+              onChange={(e) =>
+                registerDispatch({
+                  type: "fieldUpdate",
+                  field: "descripcion_general",
                   value: e.currentTarget.value,
                 })
               }

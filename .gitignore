@@ -2,4 +2,7 @@
 /app_react3
 /login/node_modules
 /register/node_modules
+/registerProvider/node_modules
+/registerService/node_modules
+/searchServices/node_modules
 /app.js

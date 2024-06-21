@@ -20,3 +20,5 @@ def print_all_documents(db_name):
 
 # Cambia 'nombre_base_datos' por el nombre de tu base de datos
 print_all_documents('usuarios')
+
+

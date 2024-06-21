@@ -2,7 +2,7 @@
 
 ## Inicio contenedor mongodb:
 ```
-sudo docker run --rm --name my-mongo -d -p 27017:27017 mongo 
+sudo docker run --rm --name my-mongo -d -p 27017:27017 mongo
 ```
 
 ## Ejecutar y probar el back de DB:

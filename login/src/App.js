@@ -2,6 +2,7 @@ import React, { useReducer } from "react";
 import "./styles.css";
 import axios from 'axios';
 
+
 function login({ mail, password }) {
   return new Promise((resolve, reject) => {
     // URL del servidor de autenticación
