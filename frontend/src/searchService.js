@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import "./styles.css";
 import axios from 'axios';
-import ServiceCard from "./ServiceCard";
+import ServiceCard from "./ServiceCard.js";
 
 // Función para buscar servicios
 function searchServices(query) {

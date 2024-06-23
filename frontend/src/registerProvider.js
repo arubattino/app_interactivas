@@ -3,7 +3,7 @@ import "./styles.css";
 import axios from 'axios';
 
 // Función de registro para proveedores de servicios
-function registerProvider({ nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion }) {
+function RegisterProvider({ nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion }) {
   return new Promise((resolve, reject) => {
     // URL del servidor de registro para proveedores
     const url = 'http://localhost:3001/registerProvider';
@@ -80,7 +80,7 @@ export default function App() {
     registerDispatch({ type: "register" });
 
     try {
-      const response = await registerProvider({ nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion });
+      const response = await RegisterProvider({ nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion });
       registerDispatch({ type: "success" });
     } catch (error) {
       if (error.response && error.response.status === 400) {
