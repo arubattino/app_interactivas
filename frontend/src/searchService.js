@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import "./styles.css";
+//import "./styles.css";
 import axios from 'axios';
 import ServiceCard from "./ServiceCard.js";
 
@@ -7,7 +7,7 @@ import ServiceCard from "./ServiceCard.js";
 function searchServices(query) {
   return new Promise((resolve, reject) => {
     // URL del servidor de búsqueda de servicios
-    const url = `http://localhost:3001/searchServices?query=${query}`;
+    const url = `http://localhost:3005/searchServices?query=${query}`;
 
     // Realizar solicitud GET para buscar servicios
     axios.get(url)

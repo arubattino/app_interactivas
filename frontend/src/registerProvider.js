@@ -1,12 +1,12 @@
 import React, { useReducer } from "react";
-import "./styles.css";
+//import "./styles.css";
 import axios from 'axios';
 
 // Función de registro para proveedores de servicios
 function RegisterProvider({ nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion }) {
   return new Promise((resolve, reject) => {
     // URL del servidor de registro para proveedores
-    const url = 'http://localhost:3001/registerProvider';
+    const url = 'http://localhost:3005/registerProvider';
 
     // Realizar solicitud POST para registrar un nuevo proveedor de servicios
     axios.post(url, { nombre, apellido, mail, password, descripcion, pais, provincia, ciudad, barrio, direccion })

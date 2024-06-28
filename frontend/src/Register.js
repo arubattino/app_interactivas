@@ -1,12 +1,12 @@
 import React, { useReducer } from "react";
-import "./styles.css";
+//import "./styles.css";
 import axios from 'axios';
 
 // Función de registro
 function register({ nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion }) {
   return new Promise((resolve, reject) => {
     // URL del servidor de registro
-    const url = 'http://localhost:3001/registerUser';
+    const url = 'http://localhost:3005/registerUser';
 
     // Realizar solicitud POST para registrar un nuevo usuario
     axios.post(url, { nombre, apellido, mail, password, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion })

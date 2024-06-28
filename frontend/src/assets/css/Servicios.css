@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
+
+.services-container {
+  padding: 2rem;
+}
+
+.title{
+  color: #2B3015;
+  font-family: 'Acme', sans-serif;
+}
+
+.services-title {
+  font-family: 'Acme', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #FEF5E1;
+}
+
+.service-card {
+  border-radius: 15px;
+  overflow: hidden;
+  height: 400px;
+}
+
+.services-text{
+  font-size: 1rem;
+  color: #FEF5E1;
+  margin-top: 50px;
+}
+
+.service-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FEF5E1;
+  color: #C05A21;
+  border: none;
+}
+
+.service-button:hover {
+  background-color: #C05A21;
+  color: #FEF5E1;
+}
+
+.card-body {
+  text-align: center;
+  font-family: 'Acme', sans-serif;
+}
+
+.highlight {
+  font-family: 'Dancing Script', cursive;
+  color: #C05A21;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.fondo {
+  
+  background-color: rgba(0, 0, 0, 0.8);;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 767px) {
+  .service-card {
+    margin-bottom: 30px; /* Espacio entre las cards en tamaño mobile */
+  }
+
+  .services-title {
+    font-size: 2rem; /* Tamaño más pequeño para títulos en móviles */
+  }
+  
+  .services-text{
+    font-size: 20px;
+  }
+}

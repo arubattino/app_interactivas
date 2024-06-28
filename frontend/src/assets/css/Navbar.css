@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
+
+.custom-navbar {
+  background-color: #C05A21 !important;
+  font-family: 'Acme', sans-serif;
+}
+
+.custom-navbar .nav-link,
+.custom-navbar .navbar-brand,
+.custom-navbar .dropdown-item,
+.custom-navbar .btn {
+  color: #FEF5E1 !important;
+}
+
+nav{
+  font-size: 20px;
+}
+
+.nav-item-padding {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.custom-navbar .dropdown-item {
+  background-color: #C05A21 !important;
+}
+
+.custom-navbar .btn-outline-custom {
+  color: #FEF5E1;
+  background-color: #2B3015;
+  border-color: #2B3015;
+}
+
+
+
+.custom-navbar .form-control {
+  color: #2B3015;
+  background-color: #FEF5E1;
+  border-radius: 5px;
+}
+
+.custom-dropdown {
+  background-color: #C05A21 !important;
+}
+
+.custom-dropdown {
+  background-color: #C05A21 !important;
+}
+
+.custom-dropdown .dropdown-menu {
+  background-color: #C05A21 !important;
+}
+
+.user-icon {
+  font-size: 1.5em;
+  margin-left: 10px;
+}
+
+/* Efecto hover */
+
+.custom-navbar .nav-link:hover
+{
+  color: #2B3015 !important;
+}
+
+.custom-navbar .dropdown-item:hover{
+  background-color: #E1925B !important;
+}
+
+.custom-navbar .btn-outline-custom:hover {
+  color: #FEF5E1;
+  background-color: #E1925B;
+  border-color: #E1925B;
+}

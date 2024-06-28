@@ -1,0 +1,96 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
+
+.principal-section {
+  padding: 150px 0;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;  
+  overflow: hidden; 
+}
+
+
+.highlight {
+  font-family: 'Dancing Script', cursive; 
+  color: #C05A21;
+  font-weight: 700;
+}
+
+.principal-section h1{
+  text-align: left;
+}
+
+.principal-section p {
+  font-size: 1.5rem; 
+  width: 100%;
+}
+
+.dog-image img {
+  width: 800px;
+  height: 600px;
+  object-fit: contain; 
+}
+
+.background-image {
+  position: absolute; 
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%; 
+  background-image: url('../images/paw_trail.png'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  opacity: 0.1; 
+  transform: rotate(-35deg); 
+  pointer-events: none;
+}
+
+
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .principal-section h1 {
+    font-size: 2.5rem;
+    text-align: center;
+  }
+
+  .principal-section .highlight {
+    font-size: 7rem;
+    text-align: center;
+  }
+
+  .principal-section p {
+    font-size: 1.15rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .principal-section h1 {
+    font-size: 4rem;
+  }
+
+  .principal-section .highlight {
+    font-size: 9rem;
+  }
+
+  .principal-section p {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .principal-section h1 {
+    font-size: 3.5rem;
+    text-align: center;
+  }
+
+  .principal-section .highlight {
+    text-align: center;
+    font-size: 5rem;
+  }
+
+  .principal-section p {
+    text-align: center;
+    font-size: 1rem;
+  }
+}

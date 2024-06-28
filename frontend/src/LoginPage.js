@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
-import './styles.css';
+//import './styles.css';
 import axios from 'axios';
 
 function login({ mail, password }) {
     return new Promise((resolve, reject) => {
       // URL del servidor de autenticación
-      const url = 'http://localhost:3001/login';
+      const url = 'http://localhost:3005/login';
   
       // Realizar solicitud POST para iniciar sesión
       axios.post(url, { mail, password })

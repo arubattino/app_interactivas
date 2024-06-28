@@ -1,0 +1,5 @@
+.gradient-background {
+    background: linear-gradient(to bottom, #FEF5E1 0%, #FEF5E1 55%,  #C05A21);
+    min-height: 50vh; /* Ajusta la altura según tus necesidades */
+    background: linear-gradient(to bottom,);
+  }
