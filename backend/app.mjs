@@ -241,7 +241,7 @@ app.get('/protected', verifyToken, (req, res) => {
 });
 
 // Iniciar el servidor
-const PORT = 3001;
+const PORT = 3005;
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
