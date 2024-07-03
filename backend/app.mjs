@@ -43,7 +43,8 @@ const usuarioSchema = new Schema({
         unique: true, // Asegura que el correo sea único
         match: [/.+\@.+\..+/, 'Por favor ingrese un correo válido']
     },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    isProvider: { type: Boolean, default: false }
 });
 
 // Definir un esquema para proveedores de servicios
@@ -63,7 +64,8 @@ const proveedorSchema = new Schema({
         unique: true, // Asegura que el correo sea único
         match: [/.+\@.+\..+/, 'Por favor ingrese un correo válido']
     },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    isProvider: { type: Boolean, default: true }
 });
 
 // Definir un esquema para los servicios
@@ -117,13 +119,13 @@ const Servicio = mongoose.model('Servicio', servicioSchema);
 
 // Ruta para el registro de usuario
 app.post('/registerUser', async (req, res) => {
-    const { nombre, apellido, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, mail, password } = req.body;
+    const { nombre, apellido, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, mail, password, isProvider } = req.body;
     try {
         const existingUser = await Usuario.findOne({ mail });
         if (existingUser) {
             return res.status(400).json({ error: 'El correo ya está registrado' });
         }
-        const newUser = new Usuario({ nombre, apellido, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, mail, password });
+        const newUser = new Usuario({ nombre, apellido, mascota, edad_mascota, pais, provincia, ciudad, barrio, direccion, mail, password, isProvider });
         await newUser.save();
         res.status(201).json({ message: 'Usuario registrado exitosamente' });
     } catch (error) {
@@ -134,13 +136,13 @@ app.post('/registerUser', async (req, res) => {
 
 // Ruta para el registro de proveedor
 app.post('/registerProvider', async (req, res) => {
-    const { nombre, apellido, servicio, descripcion, pais, provincia, ciudad, barrio, direccion, mail, password } = req.body;
+    const { nombre, apellido, servicio, descripcion, pais, provincia, ciudad, barrio, direccion, mail, password, isProvider } = req.body;
     try {
         const existingProvider = await Proveedor.findOne({ mail });
         if (existingProvider) {
             return res.status(400).json({ error: 'El correo ya está registrado' });
         }
-        const newProvider = new Proveedor({ nombre, apellido, servicio, descripcion, pais, provincia, ciudad, barrio, direccion, mail, password });
+        const newProvider = new Proveedor({ nombre, apellido, servicio, descripcion, pais, provincia, ciudad, barrio, direccion, mail, password, isProvider });
         await newProvider.save();
         res.status(201).json({ message: 'Proveedor registrado exitosamente' });
     } catch (error) {
@@ -149,11 +151,22 @@ app.post('/registerProvider', async (req, res) => {
     }
 });
 
+
 // Ruta para el inicio de sesión
 app.post('/login', async (req, res) => {
     const { mail, password } = req.body;
     try {
-        const user = await Usuario.findOne({ mail });
+        let user = await Usuario.findOne({ mail });
+        let isProvider = false;
+
+        if (user === null) {
+            // Si no se encontró en Usuario, buscamos en Proveedor
+            user = await Proveedor.findOne({ mail });
+            isProvider = true;
+        }
+        
+        console.log(user);
+        console.log(isProvider);
         if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
@@ -162,13 +175,15 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Contraseña incorrecta' });
         }
         // Generar token JWT
-        const token = jwt.sign({ mail: user.mail }, 'secreto');
-        res.json({ token });
+        const token = jwt.sign({ mail: user.mail, isProvider }, 'secreto', { expiresIn: '1h' });
+        res.json({ token, isProvider });
+
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
 
 // Ruta para el registro de servicios
 app.post('/registerService', async (req, res) => {

@@ -25,6 +25,7 @@ function login({ mail, password }) {
 const initialState = {
   mail: '',
   password: '',
+  isProvider: false,
   isLoading: false,
   error: '',
   isLoggedIn: false,
@@ -44,6 +45,7 @@ function loginReducer(state, action) {
         isLoggedIn: true,
         isLoading: false,
         token: action.token,
+        isProvider: action.isProvider
       };
     case 'failure':
       return {
@@ -65,30 +67,30 @@ function loginReducer(state, action) {
 
 export default function LoginPage() {
   const [loginState, loginDispatch] = useReducer(loginReducer, initialState);
-  const { mail, password, isLoading, error, isLoggedIn, token } = loginState;
+  const { mail, password, isLoading, error, isLoggedIn, token, isProvider } = loginState;
 
   const onSubmit = async (e) => {
     e.preventDefault();
     loginDispatch({ type: 'login' });
     try {
       const response = await login({ mail, password });
-      loginDispatch({ type: 'success', token: response.token });
+      loginDispatch({ type: 'success', token: response.token, isProvider: response.isProvider });
     } catch (error) {
       loginDispatch({ type: 'failure' });
     }
   };
+
+  
   // LA LINEA DEL TOKEN ESTA COMENTADA PARA QUE NO SE IMPRIMA EN PANTALLA, ELIMINAR O DESMARCAR !!
   return (
     <div className="App">
       <div className="login-container">
-        {isLoggedIn ? (
-          <>
-            <h1>Bienvenidos!</h1>
-            {/* <p>Token: {token}</p> */}
-            <button onClick={() => loginDispatch({ type: 'logout' })}>
-              Log Out
-            </button>
-          </>
+      {isLoggedIn ? (
+            <>
+                <h1>Bienvenidos {isProvider ? 'Proveedor' : 'Usuario'}!</h1>
+                {/* <p>Token: {token}</p> */}
+                <button onClick={() => loginDispatch({ type: 'logout' })}>Log Out</button>
+            </>
         ) : (
           <form className="form" onSubmit={onSubmit}>
             {error && <p className="error">{error}</p>}
