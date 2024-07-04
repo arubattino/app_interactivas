@@ -167,19 +167,26 @@ app.post('/login', async (req, res) => {
             isProvider = true;
         }
         
-        console.log(user);
-        console.log(isProvider);
         if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
+        
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
             return res.status(401).json({ error: 'Contraseña incorrecta' });
         }
+        
         // Generar token JWT
         const token = jwt.sign({ mail: user.mail, isProvider }, 'secreto', { expiresIn: '1h' });
-        res.json({ token, isProvider });
-
+        
+        // Enviar respuesta con token, isProvider, nombre, apellido y mail
+        res.json({
+            token,
+            isProvider,
+            nombre: user.nombre,
+            apellido: user.apellido,
+            mail: user.mail
+        });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).json({ error: 'Error interno del servidor' });

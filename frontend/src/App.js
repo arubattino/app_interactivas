@@ -89,7 +89,7 @@ function MyNavbar2({ navigate, user, onLogout }) {
       {user && (
         <>
           <button id="logout" className="nav-button" onClick={onLogout} style={{ marginLeft: 'auto' }}>Logout</button>
-          <span className="user-info">{user.isProvider ? `Proveedor: ${user.mail}` : `Usuario: ${user.mail}`}</span>
+          <span className="user-info">{user.isProvider ? `Proveedor: ${user.nombre} ${user.apellido}` : `Usuario: ${user.nombre} ${user.apellido}`}</span>
         </>
       )}
     </div>
