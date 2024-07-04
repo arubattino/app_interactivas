@@ -63,7 +63,7 @@ input {
 }
 
 .submit:hover {
-  background-color: rgba(44, 148, 51, 0.8); /* Verde más oscuro con 80% de opacidad */
+  background-color: #767b80; /* Color para los botones cuando pasas por arriba el mouse */
 }
 
 .error {
@@ -118,7 +118,7 @@ input {
 }
 
 .nav-button:hover {
-  background-color: rgba(44, 148, 51, 0.8); /* Verde más oscuro con 80% de opacidad */
+  background-color: #767b80; /* Color para los botones cuando pasas por arriba el mouse */
 }
 
 .dropdown {
@@ -172,17 +172,45 @@ input {
   }
 }
 
+/* ESTILOS PARA LA SERVICECARD.JS */
 .service-card {
   background: #f9f9f9;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 20px auto; /* Centra la tarjeta horizontalmente */
 }
 
 .service-card p {
-  margin: 5px 0;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.service-card button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #cf824f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.service-card button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.service-card button:hover:not(:disabled) {
+  background-color: #767b80;
 }
 
 .user-info {

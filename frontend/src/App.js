@@ -4,6 +4,8 @@ import Register from './Register.js';
 import RegisterProvider from './registerProvider.js';
 import RegisterService from './registerService.js';
 import SearchService from './searchService.js';
+import ServiceCard from './ServiceCard.js';
+
 import "./styles.css";
 import "./index.css"
 
@@ -98,9 +100,10 @@ function MyNavbar2({ navigate, user, onLogout }) {
 
 
 function MainPage() {
+  //const user = user;
   return (
     <div className="main-container">
-      
+
     </div>
   );
 }
@@ -110,11 +113,13 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   const handleLoginSuccess = (userData) => {
+    localStorage.setItem('token', userData.token); // Guardar el token en localStorage
     setUser(userData);
     setRoute('/');
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token'); // Eliminar el token de localStorage
     setUser(null);
     setRoute('/');
   };
@@ -122,7 +127,7 @@ export default function App() {
   const renderPage = () => {
     switch (route) {
       case '/':
-        return <MainPage />;
+        return <MainPage user={user} />;
       case '/login':
         return <LoginPage onLoginSuccess={handleLoginSuccess} />;
       case '/register':
@@ -132,7 +137,7 @@ export default function App() {
       case '/registerService':
         return <RegisterService />;
       case '/searchService':
-        return <SearchService />;
+        return <SearchService user={user} />;
       default:
         return <div>Página no encontrada</div>;
     }

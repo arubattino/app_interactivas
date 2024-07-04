@@ -40,7 +40,10 @@ function loginReducer(state, action) {
         isLoggedIn: true,
         isLoading: false,
         token: action.token,
-        isProvider: action.isProvider
+        isProvider: action.isProvider,
+        nombre: action.nombre,
+        apellido: action.apellido,
+        mail: action.mail,
       };
     case 'failure':
       return {
@@ -62,14 +65,21 @@ function loginReducer(state, action) {
 
 export default function LoginPage({ onLoginSuccess }) {
 const [loginState, loginDispatch] = useReducer(loginReducer, initialState);
-const { mail, password, isLoading, error, isLoggedIn, token, isProvider } = loginState;
+const { mail, password, isLoading, error, isLoggedIn, token, isProvider, nombre, apellido } = loginState;
 
 const onSubmit = async (e) => {
   e.preventDefault();
   loginDispatch({ type: 'login' });
   try {
     const response = await login({ mail, password });
-    loginDispatch({ type: 'success', token: response.token, isProvider: response.isProvider });
+    loginDispatch({
+      type: 'success',
+      token: response.token,
+      isProvider: response.isProvider,
+      nombre: response.nombre,
+      apellido: response.apellido,
+      mail: response.mail,
+    });
     onLoginSuccess(response);
   } catch (error) {
     loginDispatch({ type: 'failure' });
