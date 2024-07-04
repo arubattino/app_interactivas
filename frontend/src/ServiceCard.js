@@ -15,7 +15,7 @@ function ServiceCard({ service, user }) {
   console.log("Usuario ServiceCard:", user ? user.isProvider : 'No logueado');
 
   return (
-    <div className="service-card">
+    <div className="ms-service-card">
       <p><strong>Tipo de Servicio:</strong> {service.tipo_servicio}</p>
       <p><strong>Precio:</strong> ${service.precio}</p>
       <p><strong>Frecuencia:</strong> {service.frecuencia}</p>
@@ -30,7 +30,7 @@ function ServiceCard({ service, user }) {
       <button
         onClick={handleContratarClick}
         disabled={!user || user.isProvider || user === null}
-        className="contratar-button"
+        className="ms-contratar-button"
       >
         Contratar
       </button>

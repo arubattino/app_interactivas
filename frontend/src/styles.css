@@ -222,3 +222,55 @@ input {
   color: black; 
   font-weight: bold;
 }
+
+/* ESTILOS PARA LA ShowServices.js */
+.show-services-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.ms-service-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 500px;
+  min-height: 450px;
+  width: 80%; /* Ajustar según el tamaño deseado */
+  max-width: 500px; /* Ajustar según el tamaño deseado */
+  margin: 20px auto; /* Centra la tarjeta horizontalmente */
+  overflow: hidden; /* Evita que el contenido sobresalga */
+}
+
+.ms-service-card p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.ms-contratar-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #cf824f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.ms-contratar-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.ms-contratar-button:hover:not(:disabled) {
+  background-color: #767b80;
+}

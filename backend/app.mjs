@@ -246,6 +246,46 @@ app.get('/searchServices', async (req, res) => {
   });
 
 
+// Ruta para obtener los servicios de un proveedor
+app.get('/myServices', verifyToken, async (req, res) => {
+    const { mail } = req.user;
+    try {
+        const proveedor = await Proveedor.findOne({ mail });
+        if (!proveedor) {
+            return res.status(404).json({ error: 'Proveedor no encontrado' });
+        }
+        const servicios = await Servicio.find({ proveedor: proveedor._id });
+        res.json(servicios);
+    } catch (error) {
+        console.error('Error al obtener los servicios del proveedor:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Ruta para eliminar un servicio por ID
+app.delete('/services/:id', verifyToken, async (req, res) => {
+    const serviceId = req.params.id;
+    const { mail } = req.user;
+
+    try {
+        const proveedor = await Proveedor.findOne({ mail });
+        if (!proveedor) {
+            return res.status(404).json({ error: 'Proveedor no encontrado' });
+        }
+
+        const service = await Servicio.findOneAndDelete({ _id: serviceId, proveedor: proveedor._id });
+        if (!service) {
+            return res.status(404).json({ error: 'Servicio no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Servicio eliminado exitosamente.' });
+    } catch (error) {
+        console.error('Error al eliminar el servicio:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+
 // Verificar token middleware
 function verifyToken(req, res, next) {
     const token = req.headers['authorization'];

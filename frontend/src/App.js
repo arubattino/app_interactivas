@@ -4,6 +4,7 @@ import Register from './Register.js';
 import RegisterProvider from './registerProvider.js';
 import RegisterService from './registerService.js';
 import SearchService from './searchService.js';
+import ShowServices from './ShowServices.js'
 
 import "./styles.css";
 import "./index.css"
@@ -72,12 +73,17 @@ function MyNavbar2({ navigate, user, onLogout }) {
   return (
     <div className="navbar">
       <div className="dropdown">
-        <button className="nav-button" onClick={()=> navigate('/')}>Home</button>
+        <button className="nav-button" onClick={() => navigate('/')}>Home</button>
       </div>
       <button className="nav-button" onClick={() => navigate('/searchService')} style={{ marginLeft: 'auto' }}>Buscar</button>
+      
       {user && user.isProvider && (
-        <button className="nav-button" onClick={() => navigate('/registerService')} style={{ marginLeft: 'auto' }}>Nuevos Servicios</button>
+        <>
+          <button className="nav-button" onClick={() => navigate('/registerService')} style={{ marginLeft: 'auto' }}>Nuevos Servicios</button>
+          <button className="nav-button" onClick={() => navigate('/myServices')} style={{ marginLeft: 'auto' }}>Mis Servicios</button>
+        </>
       )}
+      
       {!user && (
         <>
           <button className="nav-button" onClick={() => navigate('/registerProvider')} style={{ marginLeft: 'auto' }}>Proveedores</button>
@@ -87,6 +93,7 @@ function MyNavbar2({ navigate, user, onLogout }) {
           </button>
         </>
       )}
+      
       {user && (
         <>
           <button id="logout" className="nav-button" onClick={onLogout} style={{ marginLeft: 'auto' }}>Logout</button>
@@ -135,6 +142,8 @@ export default function App() {
         return <RegisterProvider />;
       case '/registerService':
         return <RegisterService />;
+      case '/myServices':
+        return <ShowServices user={user}/>;
       case '/searchService':
         return <SearchService user={user} />;
       default:
@@ -156,3 +165,4 @@ export default function App() {
     </div>
   );
 }
+
