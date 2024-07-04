@@ -98,8 +98,8 @@ function MyNavbar2({ navigate, user, onLogout }) {
       )}
       {user && (
         <>
-          <span className="nav-button">{user.isProvider ? `Proveedor: ${user.mail}` : `Usuario: ${user.mail}`}</span>
-          <button className="nav-button" onClick={onLogout} style={{ marginLeft: 'auto' }}>Logout</button>
+          <button id="logout" className="nav-button" onClick={onLogout} style={{ marginLeft: 'auto' }}>Logout</button>
+          <span className="user-info">{user.isProvider ? `Proveedor: ${user.mail}` : `Usuario: ${user.mail}`}</span>
         </>
       )}
     </div>

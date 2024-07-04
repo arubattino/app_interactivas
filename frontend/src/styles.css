@@ -185,3 +185,9 @@ input {
   margin: 5px 0;
 }
 
+.user-info {
+  margin-left: 1em;
+  font-size: 1em;
+  color: black; /* Asegura que el texto sea negro */
+  font-weight: bold; /* Hace el texto en negrita */
+}
