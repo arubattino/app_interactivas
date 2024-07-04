@@ -3,13 +3,13 @@ import React, { useReducer } from "react";
 import axios from 'axios';
 
 // Función de registro para servicios
-function registerService({ mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general }) {
+function registerService({ mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, frecuencia, duracion, nombre_contacto, descripcion_general }) {
   return new Promise((resolve, reject) => {
     // URL del servidor de registro para servicios
     const url = 'http://localhost:3005/registerService';
 
     // Realizar solicitud POST para registrar un nuevo servicio
-    axios.post(url, { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general })
+    axios.post(url, { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, frecuencia, duracion, nombre_contacto, descripcion_general })
       .then(response => {
         // Imprimir la respuesta en la consola
         console.log('Respuesta del backend:', response.data);
@@ -33,6 +33,8 @@ const initialState = {
   direccion: "",
   telefono: "",
   mail_contacto: "",
+  frecuencia: "",
+  duracion: "",
   nombre_contacto: "",
   descripcion_general: "",
   isLoading: false,
@@ -74,7 +76,7 @@ function registerReducer(state = initialState, action) {
 
 export default function App() {
   const [registerState, registerDispatch] = useReducer(registerReducer, initialState);
-  const { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general, isLoading, error, isRegistered } = registerState;
+  const { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, frecuencia, duracion, nombre_contacto, descripcion_general, isLoading, error, isRegistered } = registerState;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,7 +84,7 @@ export default function App() {
     registerDispatch({ type: "register" });
 
     try {
-      const response = await registerService({ mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general });
+      const response = await registerService({ mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, frecuencia, duracion, nombre_contacto, descripcion_general });
       registerDispatch({ type: "success" });
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -213,6 +215,30 @@ export default function App() {
                 registerDispatch({
                   type: "fieldUpdate",
                   field: "mail_contacto",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Frecuencia"
+              value={frecuencia}
+              onChange={(e) =>
+                registerDispatch({
+                  type: "fieldUpdate",
+                  field: "frecuencia",
+                  value: e.currentTarget.value,
+                })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Duración"
+              value={duracion}
+              onChange={(e) =>
+                registerDispatch({
+                  type: "fieldUpdate",
+                  field: "duracion",
                   value: e.currentTarget.value,
                 })
               }

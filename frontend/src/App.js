@@ -68,20 +68,10 @@ const MyNavbar = () => {
 function MyNavbar2({ navigate, user, onLogout }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
-
   return (
     <div className="navbar">
       <div className="dropdown">
-        <button className="nav-button" onClick={toggleMenu}>Home</button>
-        {isMenuOpen && (
-          <div className="dropdown-menu">
-            <button className="dropdown-item" onClick={() => { navigate('/'); setMenuOpen(false); }}>Página Principal</button>
-            <button className="dropdown-item" onClick={() => { navigate('/'); setMenuOpen(false); }}>Otras Opciones</button>
-          </div>
-        )}
+        <button className="nav-button" onClick={()=> navigate('/')}>Home</button>
       </div>
       <button className="nav-button" onClick={() => navigate('/searchService')} style={{ marginLeft: 'auto' }}>Buscar</button>
       {user && user.isProvider && (

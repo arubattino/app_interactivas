@@ -78,6 +78,8 @@ const servicioSchema = new Schema({
     direccion: { type: String, required: true },
     telefono: { type: String, required: true },
     mail_contacto: { type: String, required: true, match: [/.+\@.+\..+/, 'Por favor ingrese un correo válido'] },
+    frecuencia: { type: String, required: true },
+    duracion: { type: String, required: true },
     nombre_contacto: { type: String, required: true },
     descripcion_general: { type: String, required: true },
     activo: { type: Boolean, default: true }
@@ -187,7 +189,7 @@ app.post('/login', async (req, res) => {
 
 // Ruta para el registro de servicios
 app.post('/registerService', async (req, res) => {
-    const { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, nombre_contacto, descripcion_general } = req.body;
+    const { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, frecuencia, duracion, nombre_contacto, descripcion_general } = req.body;
     try {
         // Verificar el proveedor
         const proveedor = await Proveedor.findOne({ mail });
@@ -210,7 +212,9 @@ app.post('/registerService', async (req, res) => {
             barrio, 
             direccion, 
             telefono, 
-            mail_contacto, 
+            mail_contacto,
+            frecuencia,
+            duracion,
             nombre_contacto, 
             descripcion_general 
         });
