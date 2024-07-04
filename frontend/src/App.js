@@ -65,7 +65,7 @@ const MyNavbar = () => {
   );
 };
 
-function MyNavbar2({ navigate }) {
+function MyNavbar2({ navigate, user, onLogout }) {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -80,20 +80,32 @@ function MyNavbar2({ navigate }) {
           <div className="dropdown-menu">
             <button className="dropdown-item" onClick={() => { navigate('/'); setMenuOpen(false); }}>Página Principal</button>
             <button className="dropdown-item" onClick={() => { navigate('/'); setMenuOpen(false); }}>Otras Opciones</button>
-            {/* más opciones aca */}
           </div>
         )}
       </div>
       <button className="nav-button" onClick={() => navigate('/searchService')} style={{ marginLeft: 'auto' }}>Buscar</button>
-      <button className="nav-button" onClick={() => navigate('/registerService')} style={{ marginLeft: 'auto' }}>Nuevos Servicio</button>
-      <button className="nav-button" onClick={() => navigate('/registerProvider')} style={{ marginLeft: 'auto' }}>Proveedores</button>
-      <button className="nav-button" onClick={() => navigate('/register')} style={{ marginLeft: 'auto' }}>Registrarme</button>
-      <button className="nav-button" onClick={() => navigate('/login')} style={{ marginLeft: 'auto' }}>
-        <FontAwesomeIcon icon={faUser} className="user-icon" />
-      </button>
+      {user && user.isProvider && (
+        <button className="nav-button" onClick={() => navigate('/registerService')} style={{ marginLeft: 'auto' }}>Nuevos Servicios</button>
+      )}
+      {!user && (
+        <>
+          <button className="nav-button" onClick={() => navigate('/registerProvider')} style={{ marginLeft: 'auto' }}>Proveedores</button>
+          <button className="nav-button" onClick={() => navigate('/register')} style={{ marginLeft: 'auto' }}>Registrarme</button>
+          <button className="nav-button" onClick={() => navigate('/login')} style={{ marginLeft: 'auto' }}>
+            <FontAwesomeIcon icon={faUser} className="user-icon" />
+          </button>
+        </>
+      )}
+      {user && (
+        <>
+          <span className="nav-button">{user.isProvider ? `Proveedor: ${user.mail}` : `Usuario: ${user.mail}`}</span>
+          <button className="nav-button" onClick={onLogout} style={{ marginLeft: 'auto' }}>Logout</button>
+        </>
+      )}
     </div>
   );
 }
+
 
 function MainPage() {
   return (
@@ -105,21 +117,32 @@ function MainPage() {
 
 export default function App() {
   const [route, setRoute] = useState('/');
+  const [user, setUser] = useState(null);
+
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    setRoute('/');
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setRoute('/');
+  };
 
   const renderPage = () => {
     switch (route) {
       case '/':
         return <MainPage />;
       case '/login':
-        return <LoginPage />;
+        return <LoginPage onLoginSuccess={handleLoginSuccess} />;
       case '/register':
-          return <Register />;
+        return <Register />;
       case '/registerProvider':
-          return <RegisterProvider />;
+        return <RegisterProvider />;
       case '/registerService':
-          return <RegisterService />;
+        return <RegisterService />;
       case '/searchService':
-          return <SearchService />;
+        return <SearchService />;
       default:
         return <div>Página no encontrada</div>;
     }
@@ -129,7 +152,7 @@ export default function App() {
 
   return (
     <div className='gradient-background'>
-      <MyNavbar2 navigate={setRoute} />
+      <MyNavbar2 navigate={setRoute} user={user} onLogout={handleLogout} />
       {showSections && <Principal />}
       {showSections && <Servicios />}
       {showSections && <Nosotros />}
