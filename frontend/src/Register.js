@@ -95,6 +95,7 @@ export default function App() {
 
   return (
     <div className="App">
+      <div className="background-image"></div>
       <div className="register-container">
         {isRegistered ? (
           <>
@@ -119,6 +120,7 @@ export default function App() {
                 })
               }
             />
+            
             <input
               type="text"
               placeholder="Apellido"

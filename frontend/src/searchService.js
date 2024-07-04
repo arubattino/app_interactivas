@@ -82,6 +82,7 @@ export default function App({ user }) {
 
   return (
     <div className="App">
+      <div className="background-image"></div>
       <div className="search-container">
         <form className="form" onSubmit={handleSearch}>
           {error && <p className="error">{error}</p>}

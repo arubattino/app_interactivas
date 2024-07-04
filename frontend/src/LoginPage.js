@@ -88,6 +88,7 @@ const onSubmit = async (e) => {
 
 return (
   <div className="App">
+    <div className="background-image"></div>
     <div className="login-container">
       <form className="form" onSubmit={onSubmit}>
         {error && <p className="error">{error}</p>}
