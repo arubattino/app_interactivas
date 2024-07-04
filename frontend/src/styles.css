@@ -180,8 +180,10 @@ input {
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-height: 500px;
+  min-height: 450px;
   margin: 20px auto; /* Centra la tarjeta horizontalmente */
+  overflow: hidden; /* Evita que el contenido sobresalga */
 }
 
 .service-card p {
@@ -190,7 +192,7 @@ input {
   color: #333;
 }
 
-.service-card button {
+.contratar-button {
   display: block;
   width: 100%;
   padding: 10px;
@@ -204,18 +206,19 @@ input {
   text-align: center;
 }
 
-.service-card button:disabled {
+.contratar-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.service-card button:hover:not(:disabled) {
+.contratar-button:hover:not(:disabled) {
   background-color: #767b80;
 }
 
+/*ESTILO PARA EL NOMBRE DE LOGIN EN LA NAVBAR*/
 .user-info {
   margin-left: 1em;
   font-size: 1em;
-  color: black; /* Asegura que el texto sea negro */
-  font-weight: bold; /* Hace el texto en negrita */
+  color: black; 
+  font-weight: bold;
 }

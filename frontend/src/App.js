@@ -4,7 +4,6 @@ import Register from './Register.js';
 import RegisterProvider from './registerProvider.js';
 import RegisterService from './registerService.js';
 import SearchService from './searchService.js';
-import ServiceCard from './ServiceCard.js';
 
 import "./styles.css";
 import "./index.css"

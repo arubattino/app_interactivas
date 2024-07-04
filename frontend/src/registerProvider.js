@@ -46,6 +46,8 @@ function registerReducer(state = initialState, action) {
         ...state,
         isLoading: true,
       };
+    case 'reset':
+      return initialState; // Resetea el estado del formulario
     case "success":
       return {
         ...state,

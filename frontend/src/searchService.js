@@ -62,7 +62,7 @@ function searchReducer(state = initialState, action) {
   }
 }
 
-export default function App() {
+export default function App({ user }) {
   const [searchState, searchDispatch] = useReducer(searchReducer, initialState);
   const { query, results, isLoading, error } = searchState;
 
@@ -105,7 +105,7 @@ export default function App() {
         <div className="results-container">
           {results.length > 0 ? (
             results.map((service, index) => (
-              <ServiceCard key={index} service={service} />
+              <ServiceCard key={index} service={service} user={user} />
             ))
           ) : (
             <p>No se encontraron servicios.</p>

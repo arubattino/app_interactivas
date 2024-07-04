@@ -30,6 +30,7 @@ function ServiceCard({ service, user }) {
       <button
         onClick={handleContratarClick}
         disabled={!user || user.isProvider || user === null}
+        className="contratar-button"
       >
         Contratar
       </button>
