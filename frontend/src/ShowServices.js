@@ -40,6 +40,7 @@ function ShowServices({ user }) {
 
     return (
         <div className="show-services-container">
+            <div className="background-image"></div> 
             {services.map((service) => (
                 <div key={service._id} className="ms-service-card">
                     <p><strong>Tipo de Servicio:</strong> {service.tipo_servicio}</p>
