@@ -1,18 +1,38 @@
 import React from "react";
 
 function ServiceCard({ service, user }) {
-    //console.log("Usuario es:", user ? user.isProvider : 'No logueado');
-
-  const handleContratarClick = () => {
+  const handleContratarClick = async () => {
     if (!user || user.isProvider || user === null) {
       console.log("No logueado o es proveedor");
     } else {
-      console.log("Usuario es:", user.isProvider);
-      // Aquí puedes realizar la acción de contratar el servicio
-      alert(`Contratando el servicio: ${service.tipo_servicio}`);
+      const confirm = window.confirm(`¿Estás seguro de que deseas contratar el servicio: ${service.tipo_servicio}?`);
+      if (confirm) {
+        try {
+          const response = await fetch('http://localhost:3005/hireService', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user.token}`, // Enviar el token en la cabecera
+            },
+            body: JSON.stringify({
+              serviceId: service._id,
+              userMail: user.mail
+            })
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            alert('Servicio contratado exitosamente');
+          } else {
+            alert(`Error: ${data.error}`);
+          }
+        } catch (error) {
+          console.error('Error al contratar el servicio:', error);
+          alert('Error al contratar el servicio');
+        }
+      }
     }
   };
-  console.log("Usuario ServiceCard:", user ? user.isProvider : 'No logueado');
 
   return (
     <div className="ms-service-card">

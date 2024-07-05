@@ -114,10 +114,19 @@ proveedorSchema.pre('save', async function (next) {
 // Indice de texto para buscar servicio
 servicioSchema.index({ nombre_contacto: 'text', tipo_servicio: 'text', descripcion_general: 'text' });
 
+// Definir un esquema para las contrataciones
+const contratacionSchema = new Schema({
+    servicio: { type: mongoose.Schema.Types.ObjectId, ref: 'Servicio', required: true },
+    usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
+    fecha_contratacion: { type: Date, default: Date.now },
+    estado: { type: String, default: 'pendiente' }
+});
+
 // Crear modelos
 const Usuario = mongoose.model('Usuario', usuarioSchema);
 const Proveedor = mongoose.model('Proveedor', proveedorSchema);
 const Servicio = mongoose.model('Servicio', servicioSchema);
+const Contratacion = mongoose.model('Contratacion', contratacionSchema);
 
 // Ruta para el registro de usuario
 app.post('/registerUser', async (req, res) => {
@@ -233,6 +242,74 @@ app.post('/registerService', async (req, res) => {
     }
 });
 
+// Ruta para contratar un servicio
+app.post('/hireService', verifyToken, async (req, res) => {
+    const { serviceId, userMail } = req.body;
+
+    try {
+        const usuario = await Usuario.findOne({ mail: userMail });
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        const servicio = await Servicio.findById(serviceId);
+        if (!servicio) {
+            return res.status(404).json({ error: 'Servicio no encontrado' });
+        }
+
+        const newContratacion = new Contratacion({
+            servicio: servicio._id,
+            usuario: usuario._id
+        });
+
+        await newContratacion.save();
+
+        res.status(201).json({ message: 'Servicio contratado exitosamente' });
+    } catch (error) {
+        console.error('Error al contratar el servicio:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+
+app.get('/contratos', verifyToken, async (req, res) => {
+    const { mail } = req.user; // Usar el mail del usuario desde el token
+    try {
+        const usuario = await Usuario.findOne({ mail });
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+        const contratos = await Contratacion.find({ usuario: usuario._id }).populate('servicio');
+        res.json(contratos);
+    } catch (error) {
+        console.error('Error al obtener contratos:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Ruta para eliminar un contrato por ID
+app.delete('/contratos/:id', verifyToken, async (req, res) => {
+    const contratId = req.params.id;
+    const { mail } = req.user;
+
+    try {
+        const usuario = await Usuario.findOne({ mail });
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        const contrat = await Contratacion.findOneAndDelete({ _id: contratId, usuario: usuario._id });
+        if (!contrat) {
+            return res.status(404).json({ error: 'Contrato no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Contrato eliminado exitosamente.' });
+    } catch (error) {
+        console.error('Error al eliminar el contrato:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 // Ruta para buscar servicios
 app.get('/searchServices', async (req, res) => {
     const query = req.query.query;
@@ -284,22 +361,50 @@ app.delete('/services/:id', verifyToken, async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+//======================================================================0
+// Middleware para encriptar la contraseña antes de guardar (usuarios)
+usuarioSchema.pre('save', async function (next) {
+    try {
+        if (this.isModified('password')) {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+        }
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
-
+// Middleware para encriptar la contraseña antes de guardar (proveedores)
+proveedorSchema.pre('save', async function (next) {
+    try {
+        if (this.isModified('password')) {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+        }
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+// ========================================================================
 // Verificar token middleware
 function verifyToken(req, res, next) {
     const token = req.headers['authorization'];
     if (!token) {
-        return res.status(401).json({ error: 'Token no proporcionado' });
+      return res.status(401).json({ error: 'Token no proporcionado' });
     }
-    jwt.verify(token, 'secreto', (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Token inválido' });
-        }
-        req.user = decoded;
-        next();
+  
+    const tokenWithoutBearer = token.replace('Bearer ', '');
+  
+    jwt.verify(tokenWithoutBearer, 'secreto', (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ error: 'Token inválido' });
+      }
+      req.user = decoded;
+      next();
     });
-}
+  }
 
 // Ruta protegida
 app.get('/protected', verifyToken, (req, res) => {

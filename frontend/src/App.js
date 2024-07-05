@@ -5,6 +5,7 @@ import RegisterProvider from './registerProvider.js';
 import RegisterService from './registerService.js';
 import SearchService from './searchService.js';
 import ShowServices from './ShowServices.js'
+import ShowContrats from './ShowContrats.js'
 
 import "./styles.css";
 import "./index.css"
@@ -96,6 +97,7 @@ function MyNavbar2({ navigate, user, onLogout }) {
       
       {user && (
         <>
+          <button className="nav-button" onClick={() => navigate('/myContrats')} style={{ marginLeft: 'auto' }}>Mis Contrataciones</button>
           <button id="logout" className="nav-button" onClick={onLogout} style={{ marginLeft: 'auto' }}>Logout</button>
           <span className="user-info">{user.isProvider ? `Proveedor: ${user.nombre} ${user.apellido}` : `Usuario: ${user.nombre} ${user.apellido}`}</span>
         </>
@@ -106,7 +108,6 @@ function MyNavbar2({ navigate, user, onLogout }) {
 
 
 function MainPage() {
-  //const user = user;
   return (
     <div className="main-container">
 
@@ -146,6 +147,8 @@ export default function App() {
         return <ShowServices user={user}/>;
       case '/searchService':
         return <SearchService user={user} />;
+      case '/myContrats':
+        return <ShowContrats user={user} />;
       default:
         return <div>Página no encontrada</div>;
     }
