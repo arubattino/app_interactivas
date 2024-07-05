@@ -3,36 +3,57 @@ import React from "react";
 function ServiceCard({ service, user }) {
   const handleContratarClick = async () => {
     if (!user || user.isProvider || user === null) {
-      console.log("No logueado o es proveedor");
+        console.log("No logueado o es proveedor");
     } else {
-      const confirm = window.confirm(`¿Estás seguro de que deseas contratar el servicio: ${service.tipo_servicio}?`);
-      if (confirm) {
-        try {
-          const response = await fetch('http://localhost:3005/hireService', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${user.token}`, // Enviar el token en la cabecera
-            },
-            body: JSON.stringify({
-              serviceId: service._id,
-              userMail: user.mail
-            })
-          });
+        const confirm = window.confirm(`¿Estás seguro de que deseas contratar el servicio: ${service.tipo_servicio}?`);
+        if (confirm) {
+            try {
+                // Contratar servicio
+                const responseContrato = await fetch('http://localhost:3005/hireService', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`, // Enviar el token en la cabecera
+                    },
+                    body: JSON.stringify({
+                        serviceId: service._id,
+                        userMail: user.mail
+                    })
+                });
 
-          const data = await response.json();
-          if (response.ok) {
-            alert('Servicio contratado exitosamente');
-          } else {
-            alert(`Error: ${data.error}`);
-          }
-        } catch (error) {
-          console.error('Error al contratar el servicio:', error);
-          alert('Error al contratar el servicio');
+                const dataContrato = await responseContrato.json();
+                if (!responseContrato.ok) {
+                    throw new Error(`Error al contratar servicio: ${dataContrato.error}`);
+                }
+
+                // Enviar mensaje al proveedor
+                const responseMensaje = await fetch('http://localhost:3005/sendMessageToProvider', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`, // Enviar el token en la cabecera
+                    },
+                    body: JSON.stringify({
+                        serviceId: service._id,
+                        userMail: user.mail,
+                        proveedorMail: service.mail_contacto,  // Correo del proveedor
+                        mensaje: 'Mensaje de ejemplo'  // Agrega aquí tu mensaje
+                    })
+                });
+
+                const dataMensaje = await responseMensaje.json();
+                if (!responseMensaje.ok) {
+                    throw new Error(`Error al enviar mensaje al proveedor: ${dataMensaje.error}`);
+                }
+
+                alert('Servicio contratado exitosamente');
+            } catch (error) {
+                console.error('Error al contratar el servicio:', error);
+                alert('Error al contratar el servicio');
+            }
         }
-      }
     }
-  };
+};
 
   return (
     <div className="ms-service-card">

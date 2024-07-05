@@ -85,6 +85,15 @@ const servicioSchema = new Schema({
     activo: { type: Boolean, default: true }
 });
 
+// Definir el esquema para los mensajes al proveedor
+const MensajeAlProveedorSchema = new Schema({
+    servicio: { type: mongoose.Schema.Types.ObjectId, ref: 'Servicio', required: true },
+    usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
+    proveedorMail: { type: String, required: true },  // Correo del proveedor
+    mensaje: { type: String, required: true },        // Contenido del mensaje
+    fecha_envio: { type: Date, default: Date.now }   // Fecha de envío del mensaje
+});
+
 // Middleware para encriptar la contraseña antes de guardar (usuarios)
 usuarioSchema.pre('save', async function (next) {
     try {
@@ -127,6 +136,7 @@ const Usuario = mongoose.model('Usuario', usuarioSchema);
 const Proveedor = mongoose.model('Proveedor', proveedorSchema);
 const Servicio = mongoose.model('Servicio', servicioSchema);
 const Contratacion = mongoose.model('Contratacion', contratacionSchema);
+const MensajeAlProveedor = mongoose.model('MansajeAlProveedor', MensajeAlProveedorSchema);
 
 // Ruta para el registro de usuario
 app.post('/registerUser', async (req, res) => {
@@ -361,6 +371,41 @@ app.delete('/services/:id', verifyToken, async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
+// Ruta para enviar mensaje al proveedor
+app.post('/sendMessageToProvider', verifyToken, async (req, res) => {
+    const { serviceId, userMail, proveedorMail, mensaje } = req.body;
+
+    try {
+        const usuario = await Usuario.findOne({ mail: userMail });
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        const servicio = await Servicio.findById(serviceId);
+        if (!servicio) {
+            return res.status(404).json({ error: 'Servicio no encontrado' });
+        }
+
+        // Crear un nuevo mensaje
+        const newMensaje = new MensajeAlProveedor({
+            servicio: servicio._id,
+            usuario: usuario._id,
+            proveedorMail,
+            mensaje
+        });
+
+        // Guardar el mensaje en la base de datos
+        await newMensaje.save();
+
+        res.status(201).json({ message: 'Mensaje enviado al proveedor' });
+    } catch (error) {
+        console.error('Error al enviar mensaje al proveedor:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+
 //======================================================================0
 // Middleware para encriptar la contraseña antes de guardar (usuarios)
 usuarioSchema.pre('save', async function (next) {

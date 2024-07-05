@@ -142,7 +142,7 @@ export default function App() {
       case '/registerProvider':
         return <RegisterProvider />;
       case '/registerService':
-        return <RegisterService />;
+        return <RegisterService user={user}/>;
       case '/myServices':
         return <ShowServices user={user}/>;
       case '/searchService':

@@ -1,5 +1,4 @@
-import React, { useReducer } from "react";
-//import "./styles.css";
+import React, { useReducer, useEffect } from "react";
 import axios from 'axios';
 
 // Función de registro para servicios
@@ -73,10 +72,25 @@ function registerReducer(state = initialState, action) {
   }
 }
 
-
-export default function App() {
+export default function App({ user }) {
   const [registerState, registerDispatch] = useReducer(registerReducer, initialState);
   const { mail, password, tipo_servicio, precio, tipo_animal, barrio, direccion, telefono, mail_contacto, frecuencia, duracion, nombre_contacto, descripcion_general, isLoading, error, isRegistered } = registerState;
+
+  // Establecer el correo del proveedor logueado en el campo mail_contacto
+  useEffect(() => {
+    if (user && user.mail) {
+      registerDispatch({
+        type: "fieldUpdate",
+        field: "mail",
+        value: user.mail,
+      });
+      registerDispatch({
+        type: "fieldUpdate",
+        field: "mail_contacto",
+        value: user.mail,
+      });
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,16 +126,10 @@ export default function App() {
             {error && <p className="error">{error}</p>}
             <p>Registro de Servicios:</p>
             <input
-              type="email"
+              type="hidden"
               placeholder="Email del Proveedor"
               value={mail}
-              onChange={(e) =>
-                registerDispatch({
-                  type: "fieldUpdate",
-                  field: "mail",
-                  value: e.currentTarget.value,
-                })
-              }
+              readOnly // Campo de solo lectura para el correo del proveedor
             />
             <input
               type="password"
@@ -211,14 +219,8 @@ export default function App() {
             <input
               type="email"
               placeholder="Email de Contacto"
-              value={mail_contacto}
-              onChange={(e) =>
-                registerDispatch({
-                  type: "fieldUpdate",
-                  field: "mail_contacto",
-                  value: e.currentTarget.value,
-                })
-              }
+              value={mail}
+              readOnly // Campo de solo lectura para el correo del proveedor
             />
             <input
               type="text"
@@ -268,7 +270,7 @@ export default function App() {
               }
             />
             <button className="submit" type="submit" disabled={isLoading}>
-              {isLoading ? "Registering..." : "Register"}
+              {isLoading ? "Registrando..." : "Registrar"}
             </button>
           </form>
         )}
