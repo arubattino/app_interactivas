@@ -312,6 +312,55 @@ input {
   background-color: #767b80;
 }
 
+
+/* MyComponent.css */
+
+.ms-components-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 3000px;
+  min-height: 1000px;
+  width: 90%;
+  min-width: 500px;
+  max-width: 500px;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+.ms-components-card p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.ms-components-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #cf824f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.ms-components-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.ms-components-button:hover:not(:disabled) {
+  background-color: #767b80;
+}
+
+
 /* Consultas de medios para hacer el diseño responsivo */
 @media (max-width: 768px) {
   .App, .login-container, .useContext, .todoContainer, .navbar, .main-container, .service-card, .ms-service-card {

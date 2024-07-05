@@ -89,9 +89,12 @@ const servicioSchema = new Schema({
 const MensajeAlProveedorSchema = new Schema({
     servicio: { type: mongoose.Schema.Types.ObjectId, ref: 'Servicio', required: true },
     usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
-    proveedorMail: { type: String, required: true },  // Correo del proveedor
-    mensaje: { type: String, required: true },        // Contenido del mensaje
-    fecha_envio: { type: Date, default: Date.now }   // Fecha de envío del mensaje
+    serviceType: { type: String, required: true },  
+    price: { type: String, required: true },  
+    animal: { type: String, required: true },  
+    proveedorMail: { type: String, required: true }, 
+    mensaje: { type: String, required: true },   
+    fecha_envio: { type: Date, default: Date.now }  
 });
 
 // Middleware para encriptar la contraseña antes de guardar (usuarios)
@@ -374,7 +377,7 @@ app.delete('/services/:id', verifyToken, async (req, res) => {
 
 // Ruta para enviar mensaje al proveedor
 app.post('/sendMessageToProvider', verifyToken, async (req, res) => {
-    const { serviceId, userMail, proveedorMail, mensaje } = req.body;
+    const { serviceId, userMail, serviceType, price, animal, proveedorMail, mensaje } = req.body;
 
     try {
         const usuario = await Usuario.findOne({ mail: userMail });
@@ -391,6 +394,9 @@ app.post('/sendMessageToProvider', verifyToken, async (req, res) => {
         const newMensaje = new MensajeAlProveedor({
             servicio: servicio._id,
             usuario: usuario._id,
+            serviceType,
+            price,
+            animal,
             proveedorMail,
             mensaje
         });
@@ -405,6 +411,19 @@ app.post('/sendMessageToProvider', verifyToken, async (req, res) => {
     }
 });
 
+
+// Ruta para obtener mensajes del proveedor logueado
+app.get('/messages/:mail', verifyToken, async (req, res) => {
+    const { mail } = req.params;
+  
+    try {
+        const mensajes = await MensajeAlProveedor.find({ proveedorMail: mail }).populate('servicio usuario');
+        res.json(mensajes);
+    } catch (error) {
+        console.error('Error al obtener mensajes:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
 
 //======================================================================0
 // Middleware para encriptar la contraseña antes de guardar (usuarios)

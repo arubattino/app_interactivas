@@ -36,8 +36,11 @@ function ServiceCard({ service, user }) {
                     body: JSON.stringify({
                         serviceId: service._id,
                         userMail: user.mail,
+                        serviceType: service.tipo_servicio,
+                        price: service.precio,
+                        animal: service.tipo_animal,
                         proveedorMail: service.mail_contacto,  // Correo del proveedor
-                        mensaje: 'Mensaje de ejemplo'  // Agrega aquí tu mensaje
+                        mensaje: `El usuario ${user.mail} a solicitado sus servicios.`  // Agrega aquí tu mensaje
                     })
                 });
 
